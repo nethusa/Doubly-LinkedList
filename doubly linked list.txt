@@ -1,0 +1,96 @@
+public class DoublyLinkedList {
+
+    static class Node {
+        int data;
+        Node next;
+        Node prev;
+
+        Node(int data) {
+            this.data = data;
+            this.next = null;
+            this.prev = null;
+        }
+    }
+
+    private Node head;
+    private Node tail;
+
+    public void add(int data) {
+        Node newNode = new Node(data);
+        if (head == null) {
+            head = tail = newNode;
+        } else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
+    }
+
+    public void delete(int value) {
+        if (head == null) {
+            return;
+        }
+        if (head.data == value) {
+            head = head.next;
+            if (head != null) {
+                head.prev = null;
+            } else {
+                tail = null; // List is now empty
+            }
+            return;
+        }
+        Node current = head;
+        while (current != null && current.data != value) {
+            current = current.next;
+        }
+        if (current != null) {
+            if (current.next != null) {
+                current.next.prev = current.prev;
+            } else {
+                tail = current.prev; // Updating tail if it's the last node
+            }
+            if (current.prev != null) {
+                current.prev.next = current.next;
+            }
+        }
+    }
+
+    public void displayForward() {
+        Node current = head;
+        while (current != null) {
+            System.out.print(current.data + " <-> ");
+            current = current.next;
+        }
+        System.out.println("null");
+    }
+
+    public void displayBackward() {
+        Node current = tail;
+        while (current != null) {
+            System.out.print(current.data + " <-> ");
+            current = current.prev;
+        }
+        System.out.println("null");
+    }
+
+    public static void main(String[] args) {
+        DoublyLinkedList list = new DoublyLinkedList();
+
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+
+        System.out.println("Doubly Linked List Forward:");
+        list.displayForward();
+        System.out.println("Doubly Linked List Backward:");
+        list.displayBackward();
+
+        list.delete(3);
+        System.out.println("Doubly Linked List Forward after deleting 3:");
+        list.displayForward();
+
+        System.out.println("Doubly Linked List Backward after deleting 3:");
+        list.displayBackward();
+    }
+}
